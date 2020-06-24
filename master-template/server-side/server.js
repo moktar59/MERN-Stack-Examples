@@ -9,7 +9,7 @@ var corsOption = {
     origin: 'http://localhost:8081'
 };
 
-app.use(corsOption);
+app.use(cors(corsOption));
 
 //Parse request of content type = application/json
 app.use(bodyParser.json());
