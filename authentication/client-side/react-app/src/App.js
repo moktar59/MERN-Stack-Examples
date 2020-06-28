@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -9,7 +8,7 @@ import Signin from './components/signin';
 import Signup from './components/signup';
 
 function App() {
-  return (
+  return ( <Router>
     <div className="App">
       <nav className="navbar navbar-expand-lg navbar-light fixed-top">
         <div className="container">
@@ -32,12 +31,12 @@ function App() {
           <Switch>
             <Route exact path="/" component={Signin}/>
             <Route path="/signin" component={Signin}/>
-            <Router path="/signup" component={Signup}/>
+            <Route path="/signup" component={Signup}/>
           </Switch>
         </div>
       </div>
     </div>
-  );
+    </Router>);
 }
 
 export default App;
