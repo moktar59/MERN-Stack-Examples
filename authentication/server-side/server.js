@@ -14,7 +14,7 @@ var corsOption = {
 app.use(cors(corsOption));
 
 //Parse request of content type = application/json
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 //Parse request of content type = application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
@@ -25,7 +25,8 @@ const dbConfig = require('./config/db.js');
 
 mongoose.connect(dbConfig.url, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
 });
 
 console.log("dbConfg:", dbConfig);
@@ -40,5 +41,8 @@ app.get('/', (req, res) => {
 const port = process.env.PORT || 8081;
 
 app.listen(port, () => {
-    console.log(`Server is running at port:8080`);
+    console.log(`Server is running at port:${port}`);
 });
+
+
+app.use('/users', require('./routes/user-routes'));
