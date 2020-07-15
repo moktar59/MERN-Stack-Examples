@@ -1,42 +1,63 @@
-import React from 'react';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import UserContext from './context/userContext';
+import Axios from 'axios';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 
-import Signin from './components/signin';
-import Signup from './components/signup';
+import Header from "./components/layouts/header";
+import Home from "./components/pages/home";
+import Login from "./components/auth/login";
+import Register from "./components/auth/register";
 
-function App() {
-  return ( <Router>
-    <div className="App">
-      <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-        <div className="container">
-          <Link className="navbar-brand" to={"/signin"}>NavBar Brand</Link>
-          <div  className="collapse navbar-collapse" id="navbarTogglerDemo02"> 
-            <ul  className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to={"/signin"}>Signin</Link>
-              </li>
-              <li className="navbar-nav ml-auto">
-                <Link className="nav-link" to={"/signup"}>Signup</Link>
-              </li>
-            </ul>
+import "./style.css";
+
+
+export default function App() {
+  const [userData, setUserData] = useState({
+    token: undefined,
+    user: undefined,
+  });
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      let token = localStorage.getItem("auth-token");
+      if (token === null) {
+        localStorage.setItem("auth-token", "");
+        token = "";
+      }
+      const tokenRes = await Axios.post(
+        "http://localhost:5000/users/tokenIsValid",
+        null,
+        { headers: { "x-auth-token": token } }
+      );
+      if (tokenRes.data) {
+        const userRes = await Axios.get("http://localhost:5000/users/", {
+          headers: { "x-auth-token": token },
+        });
+        setUserData({
+          token,
+          user: userRes.data,
+        });
+      }
+    };
+
+    checkLoggedIn();
+  }, []);
+
+  return (
+    <>
+      <Router>
+        <UserContext.Provider value={{ userData, setUserData }}>
+          <Header />
+          <div className="container">
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+            </Switch>
           </div>
-        </div>        
-      </nav>
-
-      <div className="auth-wrapper">
-        <div className="auth-inner">
-          <Switch>
-            <Route exact path="/" component={Signin}/>
-            <Route path="/signin" component={Signin}/>
-            <Route path="/signup" component={Signup}/>
-          </Switch>
-        </div>
-      </div>
-    </div>
-    </Router>);
+        </UserContext.Provider>
+      </Router>
+    </>
+  );
 }
-
-export default App;
