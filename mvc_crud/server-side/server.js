@@ -20,15 +20,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 //Database connection
-const mongoose = require('mongoose');
-const dbConfig = require('./config/db.js');
+const db = require('./models');
 
-mongoose.connect(dbConfig.url, {
+db.mongoose.connect(db.url, {
     useNewUrlParser: true,
     useUnifiedTopology: true
+}).then(() => {
+    console.log('connected to db.');
+}).catch (err => {
+    console.log("Couldn't connect to db. Error:", err);
+    process.exit();
 });
 
-console.log("dbConfg:", dbConfig);
 
 //base route
 app.get('/', (req, res) => {
@@ -36,6 +39,8 @@ app.get('/', (req, res) => {
         message: "Welcome to backend service."
     });
 });
+
+require('./routes/tutorial.routes')(app);
 
 const port = process.env.PORT || 8081;
 
