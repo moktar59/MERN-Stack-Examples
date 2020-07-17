@@ -3,7 +3,6 @@ import UserContext from '../../context/userContext';
 import {useHistory} from 'react-router-dom';
 import Axios from 'axios';
 import ErrorNotice from './../misc/error-notice';
-import { register } from '../../serviceWorker';
 
 export default function Register() {
   const [email, setEmail] = useState();
@@ -17,23 +16,28 @@ export default function Register() {
 
   const submit = async (e) => {
     e.preventDefault();
-
     try {
       const newUser = { email, password, passwordCheck, displayName };
-      await Axios.post("http://localhost:5000/users/register", newUser);
-      const loginRes = await Axios.post("http://localhost:5000/users/login", {
+
+      await Axios.post("http://localhost:8081/users/register", newUser);
+
+      const loginRes = await Axios.post("http://localhost:8081/users/login", {
         email,
         password,
       });
+
       setUserData({
         token: loginRes.data.token,
         user: loginRes.data.user,
       });
+
       localStorage.setItem("auth-token", loginRes.data.token);
       history.push("/");
     } catch (err) {
       err.response.data.msg && setError(err.response.data.msg);
     }
+    
+  };
 
     return (
         <div className="page">
@@ -41,6 +45,7 @@ export default function Register() {
           {error && (
             <ErrorNotice message={error} clearError={() => setError(undefined)} />
           )}
+
           <form className="form" onSubmit={submit}>
             <label htmlFor="register-email">Email</label>
             <input
@@ -72,5 +77,4 @@ export default function Register() {
           </form>
         </div>
       );
-  }; 
 }

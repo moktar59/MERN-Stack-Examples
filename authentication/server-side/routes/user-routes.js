@@ -12,17 +12,17 @@ router.post('/register', async (req, res) => {
     try {
 
     let {email, password, passwordCheck, displayName} = req.body;
-       
+
     if (!(Boolean(email) && Boolean(password) && Boolean(displayName)))
     {
         return res.status(400).json({err: "Not all required fields are provided."});
     }
     if (password.length < 6) {
-        return req.status(400).json({err: "Password should be at least 6 characters"});
+        return res.status(400).json({err: "Password should be at least 6 characters"});
     }
     
     if (password !== passwordCheck) {
-        return req.status(500).json({err: "Password and confirm password does not match."});
+        return res.status(500).json({err: "Password and confirm password does not match."});
     }
     
     const isUserIxist = await User.findOne({email})
