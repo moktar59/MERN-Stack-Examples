@@ -24,7 +24,8 @@ exports.create = (req, res) => {
 
 //Retrieve all tutorials from the database
 exports.findAll = (req, res) => {
-    const title = req.body.title;
+    const title = req.query.title;
+    console.log("req=", req.query.title);
 
     const condition = title ? {title: {$regex: new RegExp(title), $options: "i"}} : {};
 
