@@ -12,7 +12,7 @@ import BoardUser from './components/BoardUser';
 import BoardModerator from './components/BoardModerator';
 import BoardAdmin from './components/BoardAdmin';
 
-const App = () => {
+const App1 = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -32,9 +32,10 @@ const App = () => {
   };
 
   return (
+    <>
     <Router>
       <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+      <nav className="navbar navbar-expand navbar-dark bg-dark">
         <Link to="/" className="navbar-brand">
           Logo
         </Link>
@@ -98,8 +99,8 @@ const App = () => {
             </div>
           )
         }
-        </nav>
-        <div className="container mt-3">
+      </nav>
+      <div className="container mt-3">
           <Switch>
             <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
@@ -111,8 +112,10 @@ const App = () => {
           </Switch>
         </div>
       </div>
+
     </Router>
+    </>
   );
 };
 
-export default App;
+export default App1;
